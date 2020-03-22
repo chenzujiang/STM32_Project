@@ -1,0 +1,31 @@
+一、Timer的初始化
+	1、打开定时器时钟 ------APB1
+	2、初始化TIM_TimeBaseInitTypeDef对应的寄存器
+		typedef struct
+		{
+		  uint16_t TIM_Prescaler;    	预分频器的值，0 ---- 65535    
+		  uint16_t TIM_CounterMode;   	计数模式，向上/向下/双向    
+		  uint16_t TIM_Period;         	自动重装的值，0 ---- 65535  
+		  uint16_t TIM_ClockDivision;   分频因子（对定时器输出和定时时间没有影响）
+		} TIM_TimeBaseInitTypeDef; 
+	3、调用TIM_Cmd函数，使能对应定时器
+	4、配置TIM外设的中断（TIM_ITConfig）
+	5、在NVIC里面配置对应的中断通道
+	6、实现定时器中断函数体
+
+二、PWM配置
+	1、配置对应的GPIO为AF_PP模式，打开复用功能时钟
+	2、初始化对应定时器输出通道的PWM功能
+		typedef struct
+		{
+		  uint16_t TIM_OCMode;  		输出模式（PWM1模式） 
+		  uint16_t TIM_OutputState;		使能输出功能（TIM_OutputState_Enable）
+		  uint16_t TIM_Pulse;			输出比较寄存器的值 --- 用来调整占空比
+		  uint16_t TIM_OCPolarity;		输出极性（在计数寄存器小于输出比较寄存器时IO口的状态）
+		} TIM_OCInitTypeDef;
+		
+三、定时器定时时间的计算
+	TIMxCLK --- APB1的频率*2 = 72Mhz（时钟总线给通用定时器提供的时钟频率）
+	计数器计数频率 = TIMxCLK / 预分频寄存器的值
+	定时器更新时间 = (预分频寄存器的值 / TIMxCLK) * 自动装载寄存器的值
+		

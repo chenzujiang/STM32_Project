@@ -1,0 +1,8 @@
+SYSTick 初始化：
+
+调用SysTick_Config(SYSCLK / 1000);
+	其中SYSCLK为系统主频：72000000
+	
+实现中断函数
+
+
